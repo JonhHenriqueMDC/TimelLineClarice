@@ -1,77 +1,88 @@
 import { createContext, useEffect, useMemo, useRef, useState } from "react";
 
-// ✅ Esse é o export que o MusicToggle precisa
 export const AudioContext = createContext({
   playing: false,
-  toggle: () => {},
+  toggle: async () => {},
+  play: async () => {},
+  pause: () => {},
   setTrack: () => {},
-  track: null,
+  track: "",
 });
 
 export function AudioProvider({ children }) {
   const audioRef = useRef(null);
 
-  const [track, setTrack] = useState("/music/theme.mp3"); // 👈 troque pelo seu arquivo
+  // ✅ resolve GitHub Pages /TimelLineClarice/
+  const defaultTrack = `${import.meta.env.BASE_URL}music/theme.mp3`;
+
+  const [track, setTrack] = useState(defaultTrack);
   const [playing, setPlaying] = useState(false);
 
-  // cria o Audio uma vez
   useEffect(() => {
-    audioRef.current = new Audio(track);
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.6;
+    const a = new Audio(track);
+    a.loop = true;
+    a.volume = 0.6;
+
+    const onPause = () => setPlaying(false);
+    const onPlay = () => setPlaying(true);
+
+    a.addEventListener("pause", onPause);
+    a.addEventListener("play", onPlay);
+
+    audioRef.current = a;
 
     return () => {
       try {
-        audioRef.current?.pause();
+        a.pause();
       } catch {}
+      a.removeEventListener("pause", onPause);
+      a.removeEventListener("play", onPlay);
       audioRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // se trocar a track, troca a src
   useEffect(() => {
-    if (!audioRef.current) return;
+    const a = audioRef.current;
+    if (!a) return;
 
     const wasPlaying = playing;
 
-    audioRef.current.pause();
-    audioRef.current.src = track;
-    audioRef.current.load();
+    a.pause();
+    a.src = track;
+    a.load();
 
     if (wasPlaying) {
-      audioRef.current
-        .play()
-        .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
+      a.play().catch(() => setPlaying(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [track]);
 
-  const toggle = async () => {
-    if (!audioRef.current) return;
-
-    if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
-      return;
-    }
-
+  const play = async () => {
+    const a = audioRef.current;
+    if (!a) return;
     try {
-      await audioRef.current.play();
+      await a.play();
       setPlaying(true);
     } catch {
-      // navegador bloqueou autoplay: só toca se tiver interação
       setPlaying(false);
     }
   };
 
+  const pause = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.pause();
+    setPlaying(false);
+  };
+
+  const toggle = async () => {
+    if (playing) pause();
+    else await play();
+  };
+
   const value = useMemo(
-    () => ({
-      playing,
-      toggle,
-      track,
-      setTrack,
-    }),
+    () => ({ playing, toggle, play, pause, track, setTrack }),
     [playing, track]
   );
 
