@@ -1,0 +1,12 @@
+:root {
+  /* Paleta IDÊNTICA ao seu HTML */
+  --brand: 238 43 108;          /* #ee2b6c */
+  --bg: 34 16 22;               /* #221016 (background-dark) */
+  --bg-light: 248 246 246;      /* #f8f6f6 (background-light) */
+  --card: 47 22 30;             /* #2f161e (card-dark) */
+  --surface: 61 30 40;          /* #3d1e28 (surface-dark) */
+
+  --text: 255 255 255;
+  --muted: 255 255 255;         /* usaremos com opacidade */
+  --line: 255 255 255;          /* usaremos com opacidade */
+}
