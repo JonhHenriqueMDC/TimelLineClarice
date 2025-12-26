@@ -82,7 +82,7 @@ export const timeline = [
         title: "Ceará vs Palmeiras",
         desc: "📍 Arena Castelão às 15:54",
         icon: "fut",
-        media: [{ type: "image", src: "img/07dez.jpeg" }],
+        media: [{ type: "image", src: "img/7dez.jpeg" }],
       },
 
       {

@@ -7,6 +7,10 @@ export function MediaGallery({ media = [], alt = "" }) {
     [media]
   );
 
+  // resolve caminho no GitHub Pages / Discloud
+  const asset = (p) =>
+    `${import.meta.env.BASE_URL}${p.replace(/^\//, "")}`;
+
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
 
@@ -21,7 +25,7 @@ export function MediaGallery({ media = [], alt = "" }) {
   const prev = () => setActive((v) => (v - 1 + list.length) % list.length);
   const next = () => setActive((v) => (v + 1) % list.length);
 
-  // trava scroll
+  // trava scroll no fullscreen
   useEffect(() => {
     if (!open) return;
     const old = document.body.style.overflow;
@@ -33,7 +37,7 @@ export function MediaGallery({ media = [], alt = "" }) {
 
   return (
     <>
-      {/* ===== GALERIA INLINE ===== */}
+      {/* ===== GALERIA INLINE (CARROSSEL) ===== */}
       <div className="mt-2 flex gap-3 overflow-x-auto pb-2">
         {list.map((item, idx) => (
           <button
@@ -48,19 +52,25 @@ export function MediaGallery({ media = [], alt = "" }) {
           >
             {item.type === "image" ? (
               <img
-                src={item.src}
+                src={asset(item.src)}
                 alt={alt}
                 className="w-full h-auto object-contain"
                 loading="lazy"
               />
             ) : (
               <div className="relative">
+                {/* 🔥 ISSO AQUI RESOLVE O VÍDEO INVISÍVEL NO CELULAR */}
                 <video
-                  src={item.src}
+                  src={asset(item.src)}
                   className="w-full h-auto object-contain"
+                  playsInline
                   muted
+                  loop
+                  autoPlay
+                  preload="metadata"
+                  disablePictureInPicture
                 />
-                <div className="absolute inset-0 grid place-items-center">
+                <div className="absolute inset-0 grid place-items-center pointer-events-none">
                   <Play size={32} />
                 </div>
               </div>
@@ -75,6 +85,7 @@ export function MediaGallery({ media = [], alt = "" }) {
           className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center"
           onClick={(e) => e.target === e.currentTarget && close()}
         >
+          {/* fechar */}
           <button
             onClick={close}
             className="absolute top-4 right-4 h-10 w-10 rounded-full grid place-items-center bg-white/10"
@@ -82,6 +93,7 @@ export function MediaGallery({ media = [], alt = "" }) {
             <X />
           </button>
 
+          {/* navegação */}
           {hasNav && (
             <>
               <button
@@ -99,18 +111,21 @@ export function MediaGallery({ media = [], alt = "" }) {
             </>
           )}
 
+          {/* mídia ativa */}
           <div className="max-w-4xl w-full px-4">
             {list[active].type === "image" ? (
               <img
-                src={list[active].src}
+                src={asset(list[active].src)}
                 alt={alt}
                 className="w-full max-h-[85vh] object-contain"
               />
             ) : (
               <video
-                src={list[active].src}
+                src={asset(list[active].src)}
                 controls
                 autoPlay
+                playsInline
+                preload="auto"
                 className="w-full max-h-[85vh] object-contain"
               />
             )}
