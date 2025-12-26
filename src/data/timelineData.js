@@ -43,7 +43,10 @@ export const timeline = [
         title: "Ceará  vs Internacional",
         desc: "📍Arena Castelão às 00:13",
         icon: "fut",
-        media: [{ type: "image", src: "img/21nov.jpeg" }],
+        media: [
+          { type: "image", src: "img/21nov.jpeg" },
+          { type: "image", src: "img/21novpt2.jpeg" }
+        ],
       },
 
       {
