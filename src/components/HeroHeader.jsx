@@ -8,7 +8,6 @@ export function HeroHeader({
 
   videoSrc = "/TimelLineClarice/img/header.gif",
 
-  // 👇 coloque o link NORMAL da playlist aqui
   spotifyUrl = "https://open.spotify.com/playlist/2ITVGgUWwuij5jKXX2g8Lk?si=_HbSpPD3RsCS0M4IlgAWxQ&pi=U4Cko-rYTBKop",
 
   marqueeText =
