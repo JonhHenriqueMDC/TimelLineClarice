@@ -127,7 +127,10 @@ function TimelineItem({ item }) {
         </h3>
 
         {item.desc && (
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,.65)" }}>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: "rgba(255,255,255,.65)" }}
+          >
             {item.desc}
           </p>
         )}
@@ -167,9 +170,8 @@ export default function Timeline() {
   const nav = useNavigate();
 
   return (
-    // ✅ FULL WIDTH, SEM BORDA NAS LATERAIS
     <div className="min-h-screen w-full" style={{ background: "rgb(var(--bg))" }}>
-      <HeroHeader/>
+      <HeroHeader />
 
       <main className="w-full px-5 py-6 relative">
         <div className="mx-auto w-full max-w-md">
@@ -195,7 +197,10 @@ export default function Timeline() {
                   </div>
 
                   <div className="relative flex items-center justify-center py-7 mt-2">
-                    <div className="size-2 rounded-full" style={{ background: "rgba(255,255,255,.20)" }} />
+                    <div
+                      className="size-2 rounded-full"
+                      style={{ background: "rgba(255,255,255,.20)" }}
+                    />
                   </div>
                 </div>
               </section>

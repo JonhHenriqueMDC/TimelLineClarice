@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 export function MediaGallery({ media = [], alt = "" }) {
@@ -8,8 +8,7 @@ export function MediaGallery({ media = [], alt = "" }) {
   );
 
   // resolve caminho no GitHub Pages / Discloud
-  const asset = (p) =>
-    `${import.meta.env.BASE_URL}${p.replace(/^\//, "")}`;
+  const asset = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, "")}`;
 
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -25,12 +24,69 @@ export function MediaGallery({ media = [], alt = "" }) {
   const prev = () => setActive((v) => (v - 1 + list.length) % list.length);
   const next = () => setActive((v) => (v + 1) % list.length);
 
-  // trava scroll no fullscreen
+  // ✅ trava o background sem matar gestos no mobile (padrão modal)
   useEffect(() => {
     if (!open) return;
-    const old = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => (document.body.style.overflow = old);
+
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const body = document.body;
+
+    const oldPosition = body.style.position;
+    const oldTop = body.style.top;
+    const oldLeft = body.style.left;
+    const oldRight = body.style.right;
+    const oldWidth = body.style.width;
+
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+
+    return () => {
+      body.style.position = oldPosition;
+      body.style.top = oldTop;
+      body.style.left = oldLeft;
+      body.style.right = oldRight;
+      body.style.width = oldWidth;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
+  // ✅ swipe down para fechar (mobile)
+  const startYRef = useRef(null);
+  const lastYRef = useRef(null);
+
+  const onTouchStart = (e) => {
+    const y = e.touches?.[0]?.clientY;
+    startYRef.current = y ?? null;
+    lastYRef.current = y ?? null;
+  };
+
+  const onTouchMove = (e) => {
+    const y = e.touches?.[0]?.clientY;
+    if (typeof y === "number") lastYRef.current = y;
+  };
+
+  const onTouchEnd = () => {
+    const startY = startYRef.current;
+    const lastY = lastYRef.current;
+    startYRef.current = null;
+    lastYRef.current = null;
+
+    if (typeof startY !== "number" || typeof lastY !== "number") return;
+
+    const delta = lastY - startY;
+    // arrastou pra baixo o suficiente => fecha
+    if (delta > 80) close();
+  };
+
+  // ✅ ESC fecha (desktop)
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   if (list.length === 0) return null;
@@ -49,6 +105,7 @@ export function MediaGallery({ media = [], alt = "" }) {
               background: "rgba(255,255,255,.04)",
               borderColor: "rgba(255,255,255,.10)",
             }}
+            type="button"
           >
             {item.type === "image" ? (
               <img
@@ -59,7 +116,7 @@ export function MediaGallery({ media = [], alt = "" }) {
               />
             ) : (
               <div className="relative">
-                {/* 🔥 ISSO AQUI RESOLVE O VÍDEO INVISÍVEL NO CELULAR */}
+                {/* preview do vídeo */}
                 <video
                   src={asset(item.src)}
                   className="w-full h-auto object-contain"
@@ -84,27 +141,38 @@ export function MediaGallery({ media = [], alt = "" }) {
         <div
           className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center"
           onClick={(e) => e.target === e.currentTarget && close()}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{
+            // ✅ evita “prender” gesto e impede bounce estranho
+            touchAction: "pan-y",
+            overscrollBehavior: "contain",
+          }}
         >
-          {/* fechar */}
+          {/* ✅ fechar (sempre acima do vídeo) */}
           <button
             onClick={close}
-            className="absolute top-4 right-4 h-10 w-10 rounded-full grid place-items-center bg-white/10"
+            className="absolute top-4 right-4 z-50 h-10 w-10 rounded-full grid place-items-center bg-white/10"
+            type="button"
           >
             <X />
           </button>
 
-          {/* navegação */}
+          {/* ✅ navegação (sempre acima do vídeo) */}
           {hasNav && (
             <>
               <button
                 onClick={prev}
-                className="absolute left-4 h-10 w-10 rounded-full bg-white/10"
+                className="absolute left-4 z-50 h-10 w-10 rounded-full bg-white/10 grid place-items-center"
+                type="button"
               >
                 <ChevronLeft />
               </button>
               <button
                 onClick={next}
-                className="absolute right-4 h-10 w-10 rounded-full bg-white/10"
+                className="absolute right-4 z-50 h-10 w-10 rounded-full bg-white/10 grid place-items-center"
+                type="button"
               >
                 <ChevronRight />
               </button>
@@ -126,6 +194,7 @@ export function MediaGallery({ media = [], alt = "" }) {
                 autoPlay
                 playsInline
                 preload="auto"
+                // ✅ garante que não “zooma” e respeita a área visível no mobile
                 className="w-full max-h-[85vh] object-contain"
               />
             )}
