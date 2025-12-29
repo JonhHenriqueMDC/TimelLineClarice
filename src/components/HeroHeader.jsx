@@ -9,7 +9,7 @@ export function HeroHeader({
   videoSrc = "/TimelLineClarice/img/header.gif",
 
   // 👇 coloque o link NORMAL da playlist aqui
-  spotifyUrl = "https://open.spotify.com/playlist/3nocSv5bvoGQ479iTvzPHJ?si=PAah6JDISM-BDc2wdHDO7g&pi=e1JUvePoSXe1Y",
+  spotifyUrl = "https://open.spotify.com/playlist/3nocSv5bvoGQ479iTvzPHJ?si=d6f1d0ba5b8e4ef5",
 
   marqueeText =
     "AQUI VAI FICAR O TEXTO QUE VOU MANDAR PRA ELA ENTAO IGNORA ESSE TEXTO POR ENQUANDO",
