@@ -24,7 +24,7 @@ export function MediaGallery({ media = [], alt = "" }) {
   const prev = () => setActive((v) => (v - 1 + list.length) % list.length);
   const next = () => setActive((v) => (v + 1) % list.length);
 
-  // ✅ trava o background sem matar gestos no mobile (padrão modal)
+  // ✅ trava o background sem quebrar mobile
   useEffect(() => {
     if (!open) return;
 
@@ -53,22 +53,22 @@ export function MediaGallery({ media = [], alt = "" }) {
     };
   }, [open]);
 
-  // ✅ swipe down para fechar (mobile)
+  // ✅ swipe down pra fechar (mesmo tocando em cima do vídeo)
   const startYRef = useRef(null);
   const lastYRef = useRef(null);
 
-  const onTouchStart = (e) => {
+  const onTouchStartCapture = (e) => {
     const y = e.touches?.[0]?.clientY;
-    startYRef.current = y ?? null;
-    lastYRef.current = y ?? null;
+    startYRef.current = typeof y === "number" ? y : null;
+    lastYRef.current = typeof y === "number" ? y : null;
   };
 
-  const onTouchMove = (e) => {
+  const onTouchMoveCapture = (e) => {
     const y = e.touches?.[0]?.clientY;
     if (typeof y === "number") lastYRef.current = y;
   };
 
-  const onTouchEnd = () => {
+  const onTouchEndCapture = () => {
     const startY = startYRef.current;
     const lastY = lastYRef.current;
     startYRef.current = null;
@@ -77,11 +77,10 @@ export function MediaGallery({ media = [], alt = "" }) {
     if (typeof startY !== "number" || typeof lastY !== "number") return;
 
     const delta = lastY - startY;
-    // arrastou pra baixo o suficiente => fecha
-    if (delta > 80) close();
+    if (delta > 90) close(); // arrastou pra baixo => fecha
   };
 
-  // ✅ ESC fecha (desktop)
+  // ESC fecha (desktop)
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && close();
@@ -116,7 +115,6 @@ export function MediaGallery({ media = [], alt = "" }) {
               />
             ) : (
               <div className="relative">
-                {/* preview do vídeo */}
                 <video
                   src={asset(item.src)}
                   className="w-full h-auto object-contain"
@@ -126,6 +124,8 @@ export function MediaGallery({ media = [], alt = "" }) {
                   autoPlay
                   preload="metadata"
                   disablePictureInPicture
+                  // iOS inline
+                  {...{ "webkit-playsinline": "true" }}
                 />
                 <div className="absolute inset-0 grid place-items-center pointer-events-none">
                   <Play size={32} />
@@ -136,21 +136,21 @@ export function MediaGallery({ media = [], alt = "" }) {
         ))}
       </div>
 
-      {/* ===== FULLSCREEN ===== */}
+      {/* ===== FULLSCREEN (MODAL) ===== */}
       {open && (
         <div
           className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center"
           onClick={(e) => e.target === e.currentTarget && close()}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
+          // ✅ captura o gesto mesmo se começar em cima do vídeo
+          onTouchStartCapture={onTouchStartCapture}
+          onTouchMoveCapture={onTouchMoveCapture}
+          onTouchEndCapture={onTouchEndCapture}
           style={{
-            // ✅ evita “prender” gesto e impede bounce estranho
             touchAction: "pan-y",
             overscrollBehavior: "contain",
           }}
         >
-          {/* ✅ fechar (sempre acima do vídeo) */}
+          {/* fechar */}
           <button
             onClick={close}
             className="absolute top-4 right-4 z-50 h-10 w-10 rounded-full grid place-items-center bg-white/10"
@@ -159,7 +159,7 @@ export function MediaGallery({ media = [], alt = "" }) {
             <X />
           </button>
 
-          {/* ✅ navegação (sempre acima do vídeo) */}
+          {/* navegação */}
           {hasNav && (
             <>
               <button
@@ -191,11 +191,14 @@ export function MediaGallery({ media = [], alt = "" }) {
               <video
                 src={asset(list[active].src)}
                 controls
-                autoPlay
+                // ✅ não forçar autoplay (isso é um dos gatilhos de fullscreen/zoom no mobile)
                 playsInline
-                preload="auto"
-                // ✅ garante que não “zooma” e respeita a área visível no mobile
+                preload="metadata"
+                disablePictureInPicture
+                controlsList="nodownload noplaybackrate noremoteplayback"
                 className="w-full max-h-[85vh] object-contain"
+                // iOS inline
+                {...{ "webkit-playsinline": "true" }}
               />
             )}
           </div>
