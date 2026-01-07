@@ -25,6 +25,8 @@ import {
   Popcorn,
   Cake,
   Users,
+  Beef,
+  Shrimp,
 } from "lucide-react";
 
 const AXIS_LEFT = "39px";
@@ -47,6 +49,9 @@ const ICONS = {
   popcorn: Popcorn,
   cake: Cake,
   grupo: Users,
+  beef: Beef,
+  camarao: Shrimp,
+
 };
 
 function YearHeader({ year }) {

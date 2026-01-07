@@ -3,7 +3,7 @@ export const timeline = [
     year: 2024,
     items: [
       {
-        dateLabel: "14 JUL",
+        dateLabel: "14 JUL • 2024",
         title: "Primeiro Rolê/Pós ( tirando o dia do alpha 😔 )",
         desc: "📍Alpha Ville às 23:34",
         icon: "balloon",
@@ -19,7 +19,7 @@ export const timeline = [
     year: 2025,
     items: [
       {
-        dateLabel: "15 MAR",
+        dateLabel: "15 MAR • 2025",
         title: "Aniversário da Amiga Izzy",
         desc: "📍Two Brothers às 22:52",
         icon: "aniv",
@@ -27,7 +27,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "20 NOV",
+        dateLabel: "20 NOV • 2025",
         title: "Primeiro Jogo do Ceará  com a Clarice",
         desc: "📍Arena Castelão às 21:15",
         icon: "fut",
@@ -39,7 +39,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "21 NOV",
+        dateLabel: "21 NOV • 2025",
         title: "Ceará  vs Internacional",
         desc: "📍Arena Castelão às 00:13",
         icon: "fut",
@@ -50,7 +50,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "29 NOV",
+        dateLabel: "29 NOV • 2025",
         title: "Jogo do Ceará  vs Cruzeiro",
         desc: "📍Quintas do lago às 21:25",
         icon: "fut",
@@ -58,7 +58,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "30 NOV",
+        dateLabel: "30 NOV • 2025",
         title: "Pós Jogo do Ceará  vs Cruzeiro",
         desc: "📍 Quintas do lago às 00:29",
         icon: "fut",
@@ -69,7 +69,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "4 DEZ",
+        dateLabel: "4 DEZ • 2025",
         title: "Mequi com as Meninas",
         desc: "📍 Shopping do Eusebio às 15:54",
         icon: "hamburger",
@@ -81,7 +81,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "7 DEZ",
+        dateLabel: "7 DEZ • 2025",
         title: "Ceará vs Palmeiras",
         desc: "📍 Arena Castelão às 15:54",
         icon: "fut",
@@ -89,7 +89,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "17 DEZ",
+        dateLabel: "17 DEZ • 2025",
         title: "Rolê de Comemoração das Férias da Clarice",
         desc: "📍 Riomar às 16:24",
         icon: "comemorar",
@@ -100,7 +100,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "18 DEZ",
+        dateLabel: "18 DEZ • 2025",
         title: "Pós Rolê do Aniversário do Caslu",
         desc: "📍 Quintas do lago às 23:55",
         icon: "cake",
@@ -108,7 +108,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "19 DEZ",
+        dateLabel: "19 DEZ • 2025",
         title: "Rolê dos Cookies",
         desc: "📍 Alpha Ville às 22:53",
         icon: "cozinha",
@@ -120,7 +120,7 @@ export const timeline = [
       },
 
       {
-        dateLabel: "22 DEZ",
+        dateLabel: "22 DEZ • 2025",
         title: "Zootopia com as Girls",
         desc: "📍 Terrazo às 19:20",
         icon: "popcorn",
@@ -134,6 +134,16 @@ export const timeline = [
         icon: "fut",
         media: [{ type: "image", src: "img/23dez.jpeg" }],
       },
+
+      {
+        dateLabel: "28 DEZ • 2025",
+        title: "Último Rolê de 2025",
+        desc: "📍Espeto 040 às 22:43",
+        icon: "beef",
+        media: [{ type: "image", src: "img/28dez.jpeg" }],
+      }
+
+
     ],
   },
 
@@ -141,11 +151,11 @@ export const timeline = [
     year: 2026,
     items: [
       {
-        dateLabel: "JANEIRO • 2026",
-        title: "Lançamento da novidade",
-        desc: "",
-        icon: "rocket",
-        media: [{ type: "image", src: "img/launch.jpg" }],
+        dateLabel: "2 JAN • 2026",
+        title: "Primeiro Rolê de 2026",
+        desc: "📍Espeto 040 às 22:43",
+        icon: "camarao",
+        media: [{ type: "image", src: "img/2jan.jpeg" }],
       },
     ],
   },

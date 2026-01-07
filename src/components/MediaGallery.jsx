@@ -191,7 +191,6 @@ export function MediaGallery({ media = [], alt = "" }) {
               <video
                 src={asset(list[active].src)}
                 controls
-                // ✅ não forçar autoplay (isso é um dos gatilhos de fullscreen/zoom no mobile)
                 playsInline
                 preload="metadata"
                 disablePictureInPicture
